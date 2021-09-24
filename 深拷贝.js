@@ -1,47 +1,36 @@
 
 // 深拷贝：对对象内部进行深拷贝，支持 Array、Date、RegExp、DOM
-const deepCopy = (sourceObj) => {
-    // 如果不是对象则退出（可停止递归）
-    if(typeof sourceObj !== 'object') return;
-    
-    // 深拷贝初始值：对象/数组
-    let newObj = (sourceObj instanceof Array) ? [] : {};
-  
-    // 使用 for-in 循环对象属性（包括原型链上的属性）
-    for (let key in sourceObj) { 
-      // 只访问对象自身属性
-      if (sourceObj.hasOwnProperty(key)) {
-        // 当前属性还未存在于新对象中时
-        if(!(key in newObj)){
-          if (sourceObj[key] instanceof Date) {
-            // 判断日期类型
-            newObj[key] = new Date(sourceObj[key].getTime());
-          } else if (sourceObj[key] instanceof RegExp) {
-            // 判断正则类型
-            newObj[key] = new RegExp(sourceObj[key]);
-          } else if ((typeof sourceObj[key] === 'object') && sourceObj[key].nodeType === 1 ) {
-            // 判断 DOM 元素节点
-            let domEle = document.getElementsByTagName(sourceObj[key].nodeName)[0];
-            newObj[key] = domEle.cloneNode(true);
-          } else {
-            // 当元素属于对象（排除 Date、RegExp、DOM）类型时递归拷贝
-            newObj[key] = (typeof sourceObj[key] === 'object') ? deepCopy(sourceObj[key]) : sourceObj[key];
-          }
-        }
-      }
+function deepClone(obj, hash = new WeakMap()) {
+  if (obj === null) return obj; // 如果是null或者undefined我就不进行拷贝操作
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
+  // 可能是对象或者普通的值  如果是函数的话是不需要深拷贝
+  if (typeof obj !== "object") return obj;
+  // 是对象的话就要进行深拷贝
+  if (hash.get(obj)) return hash.get(obj);
+  let cloneObj = new obj.constructor();
+  // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身
+  hash.set(obj, cloneObj);
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      // 实现一个递归拷贝
+      cloneObj[key] = deepClone(obj[key], hash);
     }
-
-    return newObj;
   }
+  return cloneObj;
+}
 
 
 const objA = {
-    name: 'jack',
-    birthday: new Date(),
-    pattern: /jack/g,
-    body: document.body,
-    others: [123,'coding', new Date(), /abc/gim,]
-  };
-  
-const newObj = deepCopy(objA)
+  name: 'jack',
+  birthday: new Date(),
+  pattern: /jack/g,
+  body: document.body,
+  others: [123,'coding', new Date(), /abc/gim,]
+};
+
+let obj = { name: 1, address: { x: 100 } };
+obj.o = obj; // 对象存在循环引用的情况
+let newObj = deepClone(obj);
+obj.address.x = 200;
 console.log(newObj)
