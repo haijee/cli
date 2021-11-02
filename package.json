@@ -27,21 +27,9 @@
     "lint-staged": "^11.2.6",
     "validate-commit-msg": "^2.14.0"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "src/**": [
-      "prettier --config .prettierrc --write",
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+    "ghooks": {
+      "commit-msg": "./validate-commit-msg.js"
     }
   }
 }
