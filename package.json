@@ -27,10 +27,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     },
-    "commitlint": { 
-      "extends": [ 
-        "@commitlint/config-conventional" 
-      ] 
+    "commitlint": {
+      "extends": [
+        "@commitlint/config-conventional"
+      ]
     },
     "ghooks": {
       "commit-msg": "./validate-commit-msg.js"
