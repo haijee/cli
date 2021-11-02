@@ -27,6 +27,19 @@
     "lint-staged": "^11.2.6",
     "validate-commit-msg": "^2.14.0"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "validate-commit-msg",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**": [
+      "prettier --config .prettierrc --write",
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "config": {
     "ghooks": {
       "commit-msg": "./validate-commit-msg.js"
