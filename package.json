@@ -18,14 +18,15 @@
   "homepage": "https://github.com/haijee/example#readme",
   "devDependencies": {
     "commitizen": "^4.2.4",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "validate-commit-msg": "^2.14.0"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "commit-msg": "./validate-commit-msg.js"
     }
-    // "ghooks": {
-    //   "commit-msg": "./validate-commit-msg.js"
-    // }
   }
 }
